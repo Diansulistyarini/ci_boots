@@ -34,7 +34,7 @@
 
         .logo{
             margin-top: -475px;
-            margin-left: -60px
+            margin-left: -30px
         }
 
         .login{
@@ -73,8 +73,8 @@
         }
 
         .sign{
-            margin-left: 60%;
-            margin-top: -40px
+            margin-top: -41px;
+            margin-left: 230px;
             
         }
     </style>
@@ -89,14 +89,14 @@
 
        
         
-		<form method="post" action="<?php echo site_url('Dashboard/action_login') ?>" class="login" >
+		<form method="post" action="<?php echo site_url('Dashboard/aksi_login') ?>" class="login" >
             <div style="width: 0px; height: 250px; border: 1px #000 solid;"></div>
             <h2 class="text_login">Login</h2>
             <br>
-			<input type="text" name="user" class="form_login" placeholder="     Email or Username...">
+			<input type="text" name="username" class="form_login" placeholder="     Email or Username...">
             <br>
             <br>
-			<input type="password" name="pass" class="form_login" placeholder="     Password...">
+			<input type="password" name="password" class="form_login" placeholder="     Password...">
             <br>
             <p style="text-align: right; margin-right: 57px;margin-top: 5px;">Forgot Password?</p>
             <input type="submit" class="tombol_login" value="LOGIN">
@@ -105,7 +105,6 @@
             <div class="sign">
                 <a href="<?php echo site_url('Dashboard/register'); ?>">Sign Up</a>
             </div>
-            
 			</form>
 		
 	</div>

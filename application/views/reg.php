@@ -34,7 +34,7 @@
 
         .logo {
             margin-top: -475px;
-            margin-left: -60px
+            margin-left: -30px
         }
 
         .reg {
@@ -82,7 +82,7 @@
     <div class="card">
         <div id="card-content">
             <img src=<?php echo base_url() . 'assets/img/reg.png' ?> width="220px">
-            <img src=<?php echo base_url() . 'assets/img/logoo.jpg' ?> width="200px" class="logo">
+            <a href="<?php echo site_url('Dashboard/home'); ?>"><img src=<?php echo base_url() . 'assets/img/logoo.jpg' ?> width="200px" class="logo">
         </div>
 
         <form method="post" class="reg" action="<?php echo site_url('Dashboard/simpan_data') ?>">
@@ -101,51 +101,6 @@
                 <a href="<?php echo site_url('Dashboard/login'); ?>">Login</a>
             </div>
         </form>
-    </div>
-
-    <div class="container">
-    <table class="table table-bordered table-secondary" style="text-align: center;">
-        <thead>
-            <tr>
-            <th scope="col">No</th>
-            <th scope="col">Nama</th>
-            <th scope="col">Username</th>
-
-            <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if ($c_masyarakat> 0)
-            {
-                foreach($masyarakat as $datas)
-                {
-            ?>
-            <tr>
-            <td><?php echo $datas->id_user; ?></td>
-            <td><?php echo $datas->nama; ?></td>
-            <td><?php echo $datas->username; ?></td>
-            <td>
-                <div class="col-12">
-                <?php echo anchor('Dashboard/edit/'.$datas->id_user, '<button class="btn btn-success btn-sm edit_data" style="width:30%; margin:auto;">Edit</button>'); ?>
-                </div>
-                <div class="col-12 mt-2">
-                    <?php echo anchor('Dashboard/hapus/'.$datas->id_user, '<button class="btn btn-danger btn-sm hapus_data" style="width:30%; margin:auto;">Delete</button>'); ?>
-                </div>
-            </td>
-            </tr>
-            <?php }
-            }
-            else{
-                ?>
-                <tr>
-                    <td colspan="8"><center> Data Kosong! </center></td>
-                </tr>
-                <?php
-            }
-                ?>
-        </tbody>
-    </table>
     </div>
 
 </body>

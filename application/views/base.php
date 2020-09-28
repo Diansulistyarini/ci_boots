@@ -17,7 +17,7 @@
 
         .wrapper {
             width: 900px;
-            margin  : auto;
+            margin-left: 233px;
             padding: 15px;
             background-color: #6A94FF;
         }
@@ -68,11 +68,19 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#" style="margin-left: 560px; color:black; font-size:18px">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#" style="margin-left: 468px; color:black; font-size:18px">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo site_url('Dashboard/login'); ?>" style="margin-left: 15px; color:black; font-size:18px;">Login</a>
+                        <a class="nav-link" href="<?php echo site_url('Dashboard/login'); ?>" style="margin-left: 8px; color:black; font-size:18px;">Login</a>
                     </li>
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="color: black; font-size:18px;" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sign Up
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="<?php echo site_url('Dashboard/register'); ?>">Masyarakat</a>
+                    <a class="dropdown-item" href="<?php echo site_url('Dashboard/regmin'); ?>">Admin/Petugas</a>
+                </li>
                 </ul>
             </div>
         </nav>
