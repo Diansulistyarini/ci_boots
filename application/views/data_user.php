@@ -200,7 +200,7 @@
             Are you sure want to logout?
         </div>
         <div class="modal-footer">
-            <a href="<?php echo site_url('Dashboard/data_ofc')?>"><button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <a href="<?php echo site_url('Dashboard/ofc')?>"><button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
             <a href="<?php echo site_url('Dashboard/login')?>"><button type="button" class="btn btn-primary">Yes</button>
         </div>
         </div>

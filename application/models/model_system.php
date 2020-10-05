@@ -89,50 +89,40 @@ class model_system extends CI_Model
     }
 
     //coba ajax
-    public function getAllOfc()
+    // public function getAllOfc()
+    // {
+    //     $data = $this->db->get('petugas');
+    //     return $data->result();
+    // }
+    // get data barang array
+    public function get_petugas()
     {
-        $data = $this->db->get('petugas');
-        return $data->result();
+    $data = $this->db->get('petugas');
+    return $data->result_array();
     }
 
-    public function inputData()
+    // get id petugas untuk data edit
+    public function getIDpetugas($id_petugas)
     {
-        $data = [
-            // "id_petugas" => '',
-            "nama_petugas" => $this->input->post('nama_petugas', true),
-            "username" => $this->input->post('username', true), 
-            "password" => $this->input->post('password', true),
-            "level" => $this->input->post('level', true)
-
-        ];
-        return $this->db->insert('petugas', $data);
-        redirect('Dashboard/tampilkanData');
-
+        $this->db->where("id_petugas", $id_petugas);
+		$query = $this->db->get('petugas');
+		return $query->result();
     }
-    
-    function updateData()
-    {
-        $id = $this->input->post('id_petugas'); 
-        $nama_petugas = $this->input->post('nama_petugas', true);
-        $username = $this->input->post('username', true);
-        $password = $this->input->post('password', true);
-        $level = $this->input->post('level', true);
-        $this->db->set('nama_petugas', $nama_petugas);
-        $this->db->set('username', $username);
-        $this->db->set('level', $level);
-        $this->db->set('password', $password);
-        $this->db->where('id_petugas', $id);
-        return $this->db->update('petugas');
-        redirect('Dashboard/tampilkanData');
 
+    // data edit petugas
+    public function upd_data($where, $data, $table)
+	{
+		$this->db->where($where);
+		$this->db->update($table, $data);
     }
-    
-    public function hapusData()
-    {
-        $id_petugas = $this->input->post('id_petugas');
-        $this->db->where('id_petugas', $id_petugas);
-        return $this->db->delete('petugas');
-    }
+
+    // data delete petugas
+    function delete_data($where, $table)
+	{
+		$this->db->where($where);
+		$this->db->delete($table);
+	}
+
 
     // public function save_dataofc()
     // {
@@ -159,37 +149,6 @@ class model_system extends CI_Model
     {
         $data = $this->db->get('petugas');
         return $data->num_rows();
-    }
-
-    // function add_dataofc($data)
-    // {
-    //     $this->db->insert('petugas', $data);
-    //     return TRUE;
-    // }
-
-    // get data data
-    public function get_dataOfc()
-    {
-        $data = $this->db->get('petugas');
-        return $data->result_array();
-    }
-
-    function edit_dataofc($where, $table)
-    {
-        return $this->db->get_where($table, $where);
-    }
-
-    function update_dataofc($id_petugas, $data)
-    {
-        $this->db->set($data);
-        $this->db->where('id_petugas', $id_petugas);
-        $this->db->update('petugas');
-    }
-
-    function hapus_dataofc($where, $table)
-    {
-        $this->db->where($where);
-        $this->db->delete($table);
     }
 
     // hitung data berdasarkan status 0
@@ -255,5 +214,5 @@ class model_system extends CI_Model
     {
         $query = $this->db->query('SELECT * FROM `petugas` ORDER BY `petugas`.`nama_petugas` ASC');
         return $query->result();
-     }
+    }
 }

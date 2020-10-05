@@ -120,7 +120,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo site_url('Dashboard/data_ofc')?>">
+                        <a class="nav-link" href="<?php echo site_url('Dashboard/ofc')?>">
                         <span data-feather="file-text"></span>
                         Data Officer
                         </a>
