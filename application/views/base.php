@@ -74,12 +74,10 @@
                         <a class="nav-link" href="<?php echo site_url('Dashboard/login'); ?>" style="margin-left: 8px; color:black; font-size:18px;">Login</a>
                     </li>
                     <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" style="color: black; font-size:18px;" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sign Up
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="<?php echo site_url('Dashboard/register'); ?>">Masyarakat</a>
-                    <a class="dropdown-item" href="<?php echo site_url('Dashboard/regmin'); ?>">Admin/Petugas</a>
+                    <a class="nav-link" style="color: black; font-size:18px;" href="<?php echo site_url('Dashboard/register'); ?>" role="button">Sign Up</a>
+                    <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="<?php echo site_url('Dashboard/register'); ?>">Masyarakat</a> -->
+                    <!-- <a class="dropdown-item" href="<?php echo site_url('Dashboard/regmin'); ?>">Admin/Petugas</a> -->
                 </li>
                 </ul>
             </div>

@@ -37,42 +37,6 @@ class Dashboard extends CI_Controller
         $this->load->view('regmin', $data);
     }
 
-    // proses login
-    //     public function auth()
-    //  {
-    //   $username = $this->input->post('username');
-    //   $password = $this->input->post('password');
-    //   $cek_admin=$this->model_system->auth_admin($username, $password);
-    //   if($cek_admin->num_rows() > 0){
-    //    $data=$cek_admin->row_array();
-    //    $this->session->set_userdata('masuk',TRUE);
-    //     if($data['level']=='admin'){
-    //      $this->session->set_userdata('akses','admin');
-    //      $this->session->set_userdata('ses_username',$data['username']);
-    //      $this->session->set_userdata('ses_password',$data['password']);
-    //      redirect('Dashboard/home_admin');
-    //     }else{ 
-    //                     $this->session->set_userdata('akses','petugas');
-    //                     $this->session->set_userdata('ses_username',$data['username']);
-    //                     $this->session->set_userdata('ses_password',$data['password']);
-    //                     redirect('Dashboard/home_ofc');
-    //                  }
-    //   }else{ 
-    //    $cek_masyarakat=$this->model_system->auth_masyarakat($username,$password);
-    //    if($cek_masyarakat->num_rows() > 0){
-    //      $data=$cek_masyarakat->row_array();
-    //    $this->session->set_userdata('masuk',TRUE);
-    //      $this->session->set_userdata('akses','masyarakat');
-    //      $this->session->set_userdata('ses_username',$data['username']);
-    //      $this->session->set_userdata('ses_password',$data['password']);
-    //      redirect('Dashboard/homeuser');
-    //    }else{  
-    //      redirect('Dashboard/login');
-    //    }
-    //   }
-
-    //  }
-
     // untuk proses login
     public function aksi_login()
     {
@@ -97,14 +61,16 @@ class Dashboard extends CI_Controller
                 );
                 $this->session->set_userdata($data_session);
                 if ($this->session->userdata('status') == 'login') {
-                    header("Location:" . site_url() . "/Dashboard/home_admin");
+                    header("Location:" . site_url() . "/Dashboard/pa_pengaduan");
                 } else {
                     header("Location:" . site_url() . "/Dashboard/login");
                 }
             } elseif ($role == 'petugas') {
+                $id = $this->model_system->cek_login($where)->row(0)->id_petugas;
                 $rule = $this->model_system->cek_login($where)->row(0)->level;
                 $nama_petugas = $this->model_system->cek_login($where)->row(0)->nama_petugas;
                 $data_session = array(
+                    'id_petugas' => $id,
                     'nama_petugas' => $nama_petugas,
                     'username' => $usernames,
                     'level' => $rule,
@@ -118,12 +84,12 @@ class Dashboard extends CI_Controller
                 }
             } else {
                 $nama = $this->model_system->cek_login($where)->row(0)->nama;
-                $nik = $this->model_system->cek_login($where)->row(0)->nik;
+                $id = $this->model_system->cek_login($where)->row(0)->id_user;
                 $data_session = array(
                     'usernama' => $usernames,
                     'status' => 'login',
-                    'nama_user' => $nama,
-                    'nik' => $nik
+                    'nama' => $nama,
+                    'id_user' => $id
                 );
                 $this->session->set_userdata($data_session);
                 if ($this->session->userdata('status') == 'login') {
@@ -136,54 +102,6 @@ class Dashboard extends CI_Controller
             header("Location:" . base_url() . "");
         }
     }
-    // public function aksi_login() {
-    // 	$usernames = $this->input->post('user');
-    // 	$passwords = $this->input->post('pass');
-    // 	$where = array(
-    // 		'username' => $usernames,
-    // 		'password' => $passwords
-    // 	);
-    // 	$cek = $this->model_system->cek_login($where)->num_rows();
-
-    // 	if ($cek>0) {
-    // 		$role = $this->model_system->cek_login($where)->row(0)->level;
-    // 		if ($role == 'admin' || $role == 'petugas') {
-    // 			$rule = $this->model_system->cek_login($where)->row(0)->level;
-    // 			$nama_petugas = $this->model_system->cek_login($where)->row(0)->nama_petugas;
-    // 			$data_session = array(
-    //                 'nama_petugas' => $nama_petugas,
-    //                 'username' => $usernames,
-    //                 'level' => $rule,
-    //                 'status' => 'login'
-    // 			);
-    // 			$this->session->set_userdata($data_session);
-    // 			if ($this->session->userdata('status')=='login') {
-    // 				header("Location:".site_url()."/Dashboard/home_admin");
-    // 			} else {
-    // 				header("Location:".site_url()."/Dashboard/home_ofc");
-    // 			}
-    // 		} else {
-    // 			$nama = $this->model_system->cek_login($where)->row(0)->nama;
-    // 			// $nik = $this->model_system->cek_login($where)->row(0)->nik;
-    // 			$data_session = array(
-    // 				'username' => $usernames,
-    // 				'status' => 'login',
-    // 				'nama' => $nama
-    // 				// 'nik' => $nik
-    // 			);
-    // 			$this->session->set_userdata($data_session);
-    // 			if ($this->session->userdata('status')=='login') {
-    // 				header("Location:".site_url()."/Dashboard/homeuser");
-    // 			} else {
-    // 				echo 'gagal login';
-    // 			}
-    // 		}
-    //     } else 
-    //     {
-    //         // header("Location:".base_url()."");
-    //         
-    // 	}
-    // }
 
     public function login()
     {
@@ -230,6 +148,96 @@ class Dashboard extends CI_Controller
         $this->load->helper('url');
         $data['title'] = "Form Pengaduan";
         $this->load->view('report_form', $data);
+    }
+
+    public function pu()
+    {
+        $data['title'] = "Data Pengaduan";
+        $this->load->view('user/pageuser', $data);
+    }
+
+    public function data_pengaduan()
+    {
+        $datapengaduan = $this->model_system->get_pengaduan();
+        $no = 1;
+        foreach ($datapengaduan as $value) {
+            $tbody = array();
+            $tbody[] = $no++;
+            $tbody[] = $value['nama'];
+            $tbody[] = $value['tgl_pengaduan'];
+            $tbody[] = $value['isi_pengaduan'];
+            $img = "<img style='width: 100%;' src='http://localhost/ci_boots/assets/proof/" . $value['file'] . "' ?>";
+            $tbody[] = $img;
+            $tbody[] = $value['status'];
+            $btn = "<button type='button' class='btn btn-primary btn-sm editbutton' name='editbtn' style='margin-bottom: 10px;' data-toggle='modal' id=" . $value['id_pengaduan'] . ">
+            				<span class='icon text-white'>
+                                <i class='fas fa-edit'></i>
+                                
+                            </span>	
+
+            		</button>";
+            // <button	 type='button' data-toggle='modal' name='deletebtn' id=" . $value['id_pengaduan'] . " class='btn btn-danger btn-sm deletebtn'>
+            // 			<span class='icon text-white'>
+            // 				<i class='fas fa-trash-alt'></i>
+            // 			</span>
+
+            // </button>";
+            $tbody[] = $btn;
+            $data[] = $tbody;
+        }
+        if ($datapengaduan) {
+            echo json_encode(array('data' => $data));
+        } else {
+            echo json_encode(array('data' => 0));
+        }
+    }
+
+    public function get_pegaduan()
+    {
+        $output = array();
+        $data = $this->model_system->getIDpegaduan($_POST["id_petugas"]);
+        foreach ($data as $row) {
+            $output['nama_petugas'] = $row->nama_petugas;
+            $output['username'] = $row->username;
+            // $output['password'] = $row->password;
+            // $output['telp'] = $row->telp;
+            $output['level'] = $row->level;
+        }
+        echo json_encode($output);
+    }
+
+    public function upload_image()
+    {
+        if (isset($_FILES['user_image'])) {
+            $extension = explode('.', $_FILES['user_image']['name']);
+            $new_name = rand() . '.' . $extension[1];
+            $destination = './assets/img/' . $new_name;
+            move_uploaded_file($_FILES['user_image']['tmp_name'], $destination);
+            return $new_name;
+        }
+    }
+
+
+    // edit data petugas
+    public function edit_pengaduan()
+    {
+        if ($_POST["action"] == "edit") {
+            $idpetugas = $this->input->post('idptgs');
+            $data = array(
+                'nama_petugas' => $this->input->post('nmptgs'),
+                'username' => $this->input->post('usrnm'),
+                // 'password' => md5($this->input->post('pwptgs')),
+                // 'telp' => $this->input->post('nhpptgs'),
+                'level' => $this->input->post('rlptgs')
+            );
+
+            $where = array(
+                'id_petugas' => $idpetugas
+            );
+
+            $this->model_system->upd_data($where, $data, 'petugas');
+            echo 'Data Updated';
+        }
     }
 
     public function data_user()
@@ -348,14 +356,14 @@ class Dashboard extends CI_Controller
             $tbody[] = $value['nama_petugas'];
             $tbody[] = $value['username'];
             $tbody[] = $value['level'];
-            $btn = "<button type='button' class='btn btn-primary btn-sm editbutton' name='editbtn' data-toggle='modal' id=".$value['id_petugas'] . ">
+            $btn = "<button type='button' class='btn btn-primary btn-sm editbutton' name='editbtn' data-toggle='modal' id=" . $value['id_petugas'] . ">
 							<span class='icon text-white'>
 								<i class='fas fa-edit'></i>
 							</span>		
 					</button>
-					<button	 type='button' data-toggle='modal' name='deletebtn' id=".$value['id_petugas']. " class='btn btn-danger btn-sm deletebtn'>
+					<button	 type='button' data-toggle='modal' name='deletebtn' id=" . $value['id_petugas'] . " class='btn btn-danger btn-sm deletebtn'>
 								<span class='icon text-white'>
-									<i class='fas fa-trash'></i>
+									<i class='fas fa-trash-alt'></i>
 								</span>
 								
 					</button>";
@@ -370,85 +378,278 @@ class Dashboard extends CI_Controller
     }
 
     //ajax insert data petugas
-	public function insert_petugas()
-	{
-		if ($_POST["action"] == "Add") {
-			$data = array(
-				'id_petugas' => null,
-				'nama_petugas' => $this->input->post('nmptgs'),
-				'username' => $this->input->post('usrnm'),
-				'password' => md5($this->input->post('pwptgs')),
-				'level' => $this->input->post('rlptgs')
-			);
-			$this->db->insert('petugas', $data);
-			echo 'Data Inserted';
-		}
+    public function insert_petugas()
+    {
+        if ($_POST["action"] == "Add") {
+            $data = array(
+                'id_petugas' => null,
+                'nama_petugas' => $this->input->post('nmptgs'),
+                'username' => $this->input->post('usrnm'),
+                'password' => md5($this->input->post('pwptgs')),
+                'level' => $this->input->post('rlptgs')
+            );
+            $this->db->insert('petugas', $data);
+            echo 'Data Inserted';
+        }
     }
-    
+
+    // get id pengaduan
+    public function getIdPengaduan()
+    {
+        $output = array();
+        $data = $this->model_system->idPegaduan($_POST["id_pengaduan"]);
+        foreach ($data as $row) {
+            $output['id_pengaduan'] = $row->id_pengaduan;
+        }
+        echo json_encode($output);
+    }
+
+    public function getIdPetugas()
+    {
+        $output = array();
+        $data = $this->model_system->getIDpetugas($_POST["id_petugas"]);
+        foreach ($data as $row) {
+            $output['id_petugas'] = $row->id_petugas;
+        }
+        echo json_encode($output);
+    }
+
     public function get_petugas()
-	{
-		$output = array();
-		$data = $this->model_system->getIDpetugas($_POST["id_petugas"]);
-		foreach ($data as $row) {
-			$output['nama_petugas'] = $row->nama_petugas;
-			$output['username'] = $row->username;
-			// $output['password'] = $row->password;
-			// $output['telp'] = $row->telp;
-			$output['level'] = $row->level;
-		}
-		echo json_encode($output);
+    {
+        $output = array();
+        $data = $this->model_system->getIDpetugas($_POST["id_petugas"]);
+        foreach ($data as $row) {
+            $output['nama_petugas'] = $row->nama_petugas;
+            $output['username'] = $row->username;
+            // $output['password'] = $row->password;
+            // $output['telp'] = $row->telp;
+            $output['level'] = $row->level;
+        }
+        echo json_encode($output);
     }
-    
+
     // edit data petugas
-	public function edit_petugas()
-	{
-		if ($_POST["action"] == "edit") {
-			$idpetugas = $this->input->post('idptgs');
-			$data = array(
-				'nama_petugas' => $this->input->post('nmptgs'),
-				'username' => $this->input->post('usrnm'),
-				// 'password' => md5($this->input->post('pwptgs')),
-				// 'telp' => $this->input->post('nhpptgs'),
-				'level' => $this->input->post('rlptgs')
-			);
+    public function edit_petugas()
+    {
+        if ($_POST["action"] == "edit") {
+            $idpetugas = $this->input->post('idptgs');
+            $data = array(
+                'nama_petugas' => $this->input->post('nmptgs'),
+                'username' => $this->input->post('usrnm'),
+                // 'password' => md5($this->input->post('pwptgs')),
+                // 'telp' => $this->input->post('nhpptgs'),
+                'level' => $this->input->post('rlptgs')
+            );
 
-			$where = array(
-				'id_petugas' => $idpetugas
-			);
+            $where = array(
+                'id_petugas' => $idpetugas
+            );
 
-			$this->model_system->upd_data($where, $data, 'petugas');
-			echo 'Data Updated';
-		}
-	}
-    
+            $this->model_system->upd_data($where, $data, 'petugas');
+            echo 'Data Updated';
+        }
+    }
+
     //ajax delete data petugas
-	public function hapus_petugas()
-	{
-		$id_petugas = $_POST['id_petugas'];
-		$where = array(
-			'id_petugas' => $id_petugas
-		);
-
-		$this->model_system->delete_data($where, 'petugas');
-    }
-    
-    public function simpanData()
+    public function hapus_petugas()
     {
-        $data = $this->model_system->inputData();
-        echo json_encode($data);
+        $id_petugas = $_POST['id_petugas'];
+        $where = array(
+            'id_petugas' => $id_petugas
+        );
+
+        $this->model_system->delete_data($where, 'petugas');
     }
 
-    public function updateOfc()
+    public function pa_dtuser()
     {
-        $data = $this->model_system->updateData();
-        echo json_encode($data);
+        // $this->load->helper('url');
+        $data['title'] = "Data User";
+        $this->load->view('data_user', $data);
     }
 
-    public function hapusOfc()
+    public function report()
     {
-        $data = $this->model_system->hapusData();
-        echo json_encode($data);
+        // $this->load->helper('url');
+        $data['title'] = "Data Report";
+        $this->load->view('ofc/dtreport', $data);
     }
+
+    public function dtUser()
+    {
+        $datauser = $this->model_system->get_dtUser();
+        $no = 1;
+        foreach ($datauser as $value) {
+            $tbody = array();
+            $tbody[] = $no++;
+            $tbody[] = $value['nama'];
+            $tbody[] = $value['username'];
+            // $tbody[] = $value['password'];
+            $btn = "<button type='button' class='btn btn-primary btn-sm editbutton' name='editbtn' data-toggle='modal' id=" . $value['id_user'] . ">
+							<span class='icon text-white'>
+								<i class='fas fa-edit'></i>
+                            </span>	
+
+                    </button>
+                    <button	 type='button' data-toggle='modal' name='deletebtn' id=" . $value['id_user'] . " class='btn btn-danger btn-sm deletebtn'>
+								<span class='icon text-white'>
+									<i class='fas fa-trash-alt'></i>
+								</span>
+								
+					</button>";
+            $tbody[] = $btn;
+            $data[] = $tbody;
+        }
+        if ($datauser) {
+            echo json_encode(array('data' => $data));
+        } else {
+            echo json_encode(array('data' => 0));
+        }
+    }
+
+    public function cetakOfc_pdf()
+    {
+        ob_start();
+        $data['petugas'] = $this->model_system->get_ofc();
+        $data['c_petugas'] = $this->model_system->count_ofc();
+        $this->load->view('ofc/previewofc', $data);
+
+        $html = ob_get_contents();
+        ob_end_clean();
+
+        require './assets/html2pdf/autoload.php';
+        // include './assets/html2pdf/autoload.php';
+
+        $pdf = new Spipu\Html2Pdf\Html2Pdf('P', 'A4', 'en');
+        $pdf->WriteHTML($html);
+
+        $pdf->Output('data_' . date('d-m-Y') . '.pdf', 'D');
+    }
+
+    public function previewOfc()
+    {
+        $data['petugas'] = $this->model_system->get_ofc();
+        $data['c_petugas'] = $this->model_system->count_ofc();
+        $data['petugas'] = $this->model_system->viewrow_ofc();
+        $this->load->view('ofc/previewofc', $data);
+    }
+
+    public function cetakUser_xls()
+    {
+        $data = $this->model_system->get_ofc();
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'ID Petugas');
+        $sheet->setCellValue('B1', 'Nama');
+        $sheet->setCellValue('C1', 'Username');
+        $sheet->setCellValue('D1', 'Level');
+
+        $rexcel = 2;
+        foreach ($data as $row) {
+            $sheet->setCellValue('A' . $rexcel, $row->id_petugas);
+            $sheet->setCellValue('B' . $rexcel, $row->nama_petugas);
+            $sheet->setCellValue('C' . $rexcel, $row->username);
+            $sheet->setCellValue('C' . $rexcel, $row->level);
+            $rexcel++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'DataPetugas-excel';
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
+
+
+    public function pa_pengaduan()
+    {
+        // $this->load->helper('url');
+        $data['title'] = "Data Pengaduan";
+        $this->load->view('ofc/dtpengaduan', $data);
+    }
+
+    public function set_pengaduan()
+    {
+        $datapengaduan = $this->model_system->get_dtpengaduan();
+        $no = 1;
+        foreach ($datapengaduan as $value) {
+            $tbody = array();
+            $tbody[] = $no++;
+            // $tbody[] = $value['id_pengaduan'];
+            $tbody[] = $value['tgl_pengaduan'];
+            $tbody[] = $value['isi_pengaduan'];
+            $img = "<img style='width: 100%;' src='http://localhost/ci_boots/assets/proof/" . $value['file'] . "' ?>";
+            $tbody[] = $img;
+            $tbody[] = $value['status'];
+            $btn = "<button type='button' class='btn btn-primary btn-sm editbutton' name='editbtn' data-toggle='modal' id=" . $value['id_pengaduan'] . ">
+                    <span class='icon text-white'>
+                        <i class='fas fa-edit'></i> Respons
+                    </span>		
+                    </button>";
+            $tbody[] = $btn;
+            $data[] = $tbody;
+        }
+        if ($datapengaduan) {
+            echo json_encode(array('data' => $data));
+        } else {
+            echo json_encode(array('data' => 0));
+        }
+    }
+
+    //ajax insert data tanggapan admin
+    public function insert_report()
+    {
+        // if ($_POST["action"] == "Add") {
+            $idAduan = $this->input->post('idAduan');
+        // $idPetugas = $this->session->userdata('id_petugsa');
+        $data = array(
+            'id_tanggapan' => NULL,
+            'id_pengaduan' => $this->input->post('idAduan'),
+            'tgl_tanggapan' => $this->input->post('tgltanggapan'),
+            'tanggapan' => $this->input->post('tanggapan'),
+            'id_petugas' => $this->input->post('id_petugas')
+        );
+
+
+        $data2 = array(
+            'status' => 'selesai' 
+        );
+
+        $where = array(
+            'id_pengaduan' => $this->input->post('idAduan'),
+        );
+
+        // insert ke tabel tanggapan
+        $this->db->insert('tanggapan', $data);
+        // update data pengaduan
+        $this->db->where('id_pengaduan',$idAduan);
+        $this->db->update('pengaduan', $data2, $where);
+
+        //     echo 'Data Inserted';
+        // }
+    }
+
+    // public function simpanData()
+    // {
+    //     $data = $this->model_system->inputData();
+    //     echo json_encode($data);
+    // }
+
+    // public function updateOfc()
+    // {
+    //     $data = $this->model_system->updateData();
+    //     echo json_encode($data);
+    // }
+
+    // public function hapusOfc()
+    // {
+    //     $data = $this->model_system->hapusData();
+    //     echo json_encode($data);
+    // }
 
     // public function data_ofc(){
     //     $data['title'] = "Data Officer";
@@ -475,55 +676,7 @@ class Dashboard extends CI_Controller
     //     redirect('Dashboard/data_ofc');
     // }
 
-    // AJAX
-    // ajax show data
-    // public function data_ofc()
-    // {
-    //     $dataOfc = $this->model_system->get_dataOfc();
-    //     foreach ($dataOfc as $value) {
-    // 		$tbody = array();
-    // 		$tbody[] = $value['nama_petugas'];
-    //         $tbody[] = $value['username'];
-    //         $tbody[] = $value['password'];  
-    //         $tbody[] = $value['level'];
-    // 		$btn = "<button type='button' class='btn btn-primary btn-icon-split editbtn' name='editbtn' data-toggle='modal' id=" . $value['id_petugas'] . " 	style='padding-right: 6%;'>
-    // 					<span class='icon text-white'>
-    // 						<i class='fas fa-edit'></i>
-    // 					</span>
-    // 					<span class='text'>Edit Data</span>
-    // 					</button>
-    // 					<button type='button' data-toggle='modal' name='deletebtn' id=" . $value['id_petugas'] . " class='btn btn-danger btn-icon-split mt-2 deletebtn'>
-    // 						<span class='icon text-white'>
-    // 							<i class='fas fa-trash'></i>
-    // 						</span>
-    // 						<span class='text'>Delete Data</span>
-    // 					</button>";
-    // 		$tbody[] = $btn;
-    // 		$data[] = $tbody;
-    // 	}
-    // 	if ($dataOfc) {
-    // 		echo json_encode(array('data' => $data));
-    // 	} else {
-    // 		echo json_encode(array('data' => 0));
-    // 	}
-    // }
-
-    // // ajax add data
-    // // add goods
-    // public function addData()
-    // {
-    // 	if ($_POST["action"] == "Add") {
-    // 		$data = array(
-    // 			'id_petugas' => "",
-    // 			'nama' => $this->input->post('nama'),
-    // 			'username' => $this->input->post('username'),
-    // 			'password' => $this->input->post('password'),
-    // 			'level' => $this->input->post('level')
-    // 		);
-    // 		$this->db->insert('petugas', $data);
-    // 		echo 'Data Inserted';
-    // 	}
-    // }
+    
 
     function edit_ofc($id_petugas)
     {
@@ -575,13 +728,13 @@ class Dashboard extends CI_Controller
     public function save_report()
     {
         $this->model_system->report();
-        $this->load->view('hasil_report');
+        $this->load->view('user/pageuser');
     }
 
     public function hasil_report()
     {
         $data['title'] = "Hasil Report";
-        $this->load->view('hasil_report', $data);
+        $this->load->view('user/pageuser', $data);
     }
 
     function logout()

@@ -19,6 +19,13 @@ class model_system extends CI_Model
         }
     }
 
+    public function getid_petugas($id_petugas)
+    {
+        $this->db->where("id_petugas", $id_petugas);
+		$query = $this->db->get('petugas');
+		return $query->result();
+    }
+
     // function auth_masyarakat($username, $password)
     //     {
     //         $query=$this->db->query("SELECT * FROM masyarakat WHERE username='$username' AND password='$password' LIMIT 1");
@@ -88,6 +95,13 @@ class model_system extends CI_Model
         return $data->num_rows();
     }
 
+    public function get_pengaduan()
+    {   
+        $nama = $this->session->userdata('nama');
+        $query = $this->db->query("SELECT * FROM `pengaduan` WHERE nama= '$nama'");
+        return $query->result_array();
+    }
+
     //coba ajax
     // public function getAllOfc()
     // {
@@ -95,33 +109,58 @@ class model_system extends CI_Model
     //     return $data->result();
     // }
     // get data barang array
+    public function get_dtUser()
+    {
+        $data = $this->db->get('masyarakat');
+        return $data->result_array();
+    }
+
     public function get_petugas()
     {
-    $data = $this->db->get('petugas');
-    return $data->result_array();
+        $data = $this->db->get('petugas');
+        return $data->result_array();
+    }
+
+    public function viewofc()
+    {
+        $data = $this->db->get('masyarakat');
+        return $data->result();
+    }
+
+    public function viewrow_ofc()
+    {
+        $data = $this->db->get('petugas');
+        return $data->result();
+    }
+
+    public function idPegaduan($idPengaduan)
+    {
+        $this->db->where("id_pengaduan", $idPengaduan);
+        $query = $this->db->get('pengaduan');
+        return $query->result();
     }
 
     // get id petugas untuk data edit
     public function getIDpetugas($id_petugas)
     {
         $this->db->where("id_petugas", $id_petugas);
-		$query = $this->db->get('petugas');
-		return $query->result();
+        $query = $this->db->get('petugas');
+        return $query->result();
     }
 
     // data edit petugas
     public function upd_data($where, $data, $table)
-	{
-		$this->db->where($where);
-		$this->db->update($table, $data);
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
     }
 
     // data delete petugas
     function delete_data($where, $table)
-	{
-		$this->db->where($where);
-		$this->db->delete($table);
-	}
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
 
 
     // public function save_dataofc()
@@ -193,6 +232,7 @@ class model_system extends CI_Model
 
     public function get_report()
     {
+
         $doc = $this->db->get('pengaduan');
         return $doc->result();
     }
@@ -201,6 +241,18 @@ class model_system extends CI_Model
     {
         $data = $this->db->get('pengaduan');
         return $data->num_rows();
+    }
+
+    public function get_dtpengaduan()
+    {
+        $data = $this->db->get('pengaduan');
+        return $data->result_array();
+    }
+
+    public function savetanggap($data)
+    {
+        $this->db->insert('tanggapan', $data);
+        header("location",base_url().'Dashboard/pa_pengaduan');
     }
 
     function get_name()

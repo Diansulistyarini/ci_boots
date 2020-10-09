@@ -91,7 +91,7 @@
         <div class="container-fluid">
             <!-- sidebar -->
             <div class="row">
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
                     <div class="sidebar-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item border-bottom">
@@ -122,12 +122,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?php echo site_url('Dashboard/ofc') ?>">
+                                <a class="nav-link" href="<?php echo site_url('Dashboard/officer') ?>">
                                     <span data-feather="file-text"></span>
                                     Data Officer
                                 </a>
                             </li>
-                        
+
                         </ul>
                     </div>
                 </nav>
@@ -143,20 +143,35 @@
                         <a href="<?php echo site_url('Dashboard/cetak_xls'); ?>"><img src="<?php echo base_url() . 'assets/img/excel.png' ?>" width="52px" style="margin-left: 980px;margin-top: -90px;"></a>
 
                     </div>
-                    <table class="table table-bordered table-secondary" style="text-align: center;" id="dataUser">
-                        <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Nama</th>
-                                <th scope="col">Username</th>
-                                <!-- <th scope="col">Action</th> -->
-                            </tr>
-                        </thead>
-                        <tbody id="data_user">
-
-
-                        </tbody>
-                    </table>
+                    <?php foreach ($pengaduan as $a) { ?>
+                    
+                    <div class="card-mt-5">
+                        <div class="card-header text-center">
+                            <h4>Respon Admin</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="<?php echo base_url('Dashboard/report'); ?>">
+                                <div class="form-group">
+                                    <label for="IDpengaduan">ID Pengaduan</label>
+                                    <input type="text" name="idPengaduan" id="idaduan" class="form-control" value="<?php echo $a->id_pengaduan; ?>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Tanggal</label>
+                                    <input type="date"  name="tgltanggapan" id="tgltanggapan" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="IDpengaduan">Response</label>
+                                    <input type="text" name="response" id="respon" class="form-control" value="<?php echo $a->isi_pengaduan; ?>" disabled>
+                                </div>
+                                    <input type="text" name="id_petugas" id="idPetugas" class="form-control" hidden>
+                                
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <?php
+                        }
+                    ?>
 
                     <!-- Modal Logout -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -201,11 +216,11 @@
                     <script src="<?php echo base_url('assets/vendor/vendor/jquery-easing/jquery.easing.js') ?>"></script>
 
                     <!-- DataTable -->
-                    <script src="<?php echo base_url('assets/vendor/vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-                    <script src="<?php echo base_url('assets/vendor/vendor/datatables/dataTables.bootstrap4.js') ?>"></script>
+                    <!-- <script src="<?php echo base_url('assets/vendor/vendor/datatables/jquery.dataTables.min.js') ?>"></script>
+                    <script src="<?php echo base_url('assets/vendor/vendor/datatables/dataTables.bootstrap4.js') ?>"></script> -->
 
                     <!-- Swall Alert -->
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.1/sweetalert2.all.min.js"></script>
+                    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.1/sweetalert2.all.min.js"></script> -->
 
                     <!-- DataTable -->
                     <!-- <script src="<?php echo base_url('assets/vendor/vendor/jquery/jquery.min.js') ?>"></script> -->
@@ -215,155 +230,11 @@
                     <!-- Place your kit's code here -->
                     <script src="https://kit.fontawesome.com/847ba36c18.js" crossorigin="anonymous"></script>
 
-                    <script src="<?php echo base_url('assets/datatables/jquery.dataTables.min.js') ?>"></script>
-                    <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap4.min.js') ?>"></script>
+                    <!-- <script src="<?php echo base_url('assets/datatables/jquery.dataTables.min.js') ?>"></script>
+                    <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap4.min.js') ?>"></script> -->
 
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.1/sweetalert2.all.min.js"></script>
+                    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.1/sweetalert2.all.min.js"></script> -->
 
-
-                    <script>
-                        $(document).ready(function() {
-                            // ini adalah fungsi untuk memunculkan modal
-                            // $('.addbtn').on('click', function() {
-
-                            //     $('#addModal').modal('show');
-
-                            // });
-                            // ini adalah fungsi untuk memunculkan data di datatable
-                            var data_petugas = $('#dataUser').DataTable({
-                                "processing": true,
-                                "ajax": "<?= base_url("Dashboard/dtUser") ?>",
-                                "data": [],
-                            });
-
-
-                            // EDIT DATA
-                            // Get id petugas
-                            $(document).on('click', '.editbutton', function(event) {
-                                console.log("masuk halaman edit")
-                                var div = $(event.relatedTarget)
-                                var id_petugas = $(this).attr("id");
-                                $.ajax({
-                                    url: "get_petugas",
-                                    type: "post",
-                                    data: {
-                                        id_petugas: id_petugas
-                                    },
-                                    dataType: "JSON",
-                                    success: function(data) {
-                                        $('#editModal').modal('show');
-                                        $('#namapetugas').val(data.nama_petugas);
-                                        $('#usernamepetugas').val(data.username);
-                                        // $('#passwordpetugas').val(data.password);
-                                        // $('#telppetugas').val(data.telp);
-                                        $('#rolepetugas').val(data.level);
-                                        $('#idpetugas').val(id_petugas);
-                                    },
-                                    error: function(xhr, ajaxOptions, thrownError) {
-                                        console.log(xhr.responseText);
-                                    }
-                                });
-                            });
-
-                            // Edit petugas
-                            $(document).on('submit', '#editpetugas', function(event) {
-                                event.preventDefault();
-                                var petugas_nama = $('#namapetugas').val();
-                                var petugas_username = $('#usernamepetugas').val();
-                                // var petugas_password = $('#passwordpetugas').val();
-                                // var petugas_telpon = $('#telppetugas').val();
-                                var petugas_level = $('#rolepetugas').val();
-
-                                if (petugas_nama != '' && petugas_username != '' && petugas_level != '') {
-                                    $.ajax({
-                                        type: "post",
-                                        url: "<?= base_url("Dashboard/edit_petugas") ?>",
-                                        beforeSend: function() {
-                                            swal({
-                                                type: 'loading',
-                                                title: 'Menunggu',
-                                                html: 'Memproses data',
-                                                onOpen: () => {
-                                                    swal.showLoading()
-                                                }
-                                            })
-                                        },
-                                        data: new FormData(this),
-                                        contentType: false,
-                                        processData: false,
-                                        success: function() {
-                                            swal({
-                                                type: 'success',
-                                                title: 'Edit Data Petugas',
-                                                text: 'Anda Berhasil Mengedit Data Petugas'
-                                            })
-                                            $('#editpetugas')[0].reset();
-                                            $('#editModal').modal('hide');
-                                            data_petugas.ajax.reload(null, false);
-                                        },
-                                        error: function(xhr, ajaxOptions, thrownError) {
-                                            console.log(xhr.responseText);
-                                        }
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: 'Bother fields are required!',
-                                    });
-                                }
-                            });
-
-                            // delete petugas
-                            $(document).on('click', '.deletebtn', function() {
-                                var id_petugas = $(this).attr("id");
-                                swal({
-                                    title: 'Konfirmasi',
-                                    text: "Apakah anda yakin ingin menghapus ",
-                                    type: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Hapus',
-                                    confirmButtonColor: '#d33',
-                                    cancelButtonColor: '#3085d6',
-                                    cancelButtonText: 'Tidak',
-                                    reverseButtons: true
-                                }).then((result) => {
-                                    if (result.value) {
-                                        $.ajax({
-                                            url: "<?= base_url('Dashboard/hapus_petugas') ?>",
-                                            type: "post",
-                                            beforeSend: function() {
-                                                swal({
-                                                    title: 'Menunggu',
-                                                    html: 'Memproses data',
-                                                    onOpen: () => {
-                                                        swal.showLoading()
-                                                    }
-                                                })
-                                            },
-                                            data: {
-                                                id_petugas: id_petugas
-                                            },
-                                            success: function(data) {
-                                                swal(
-                                                    'Hapus',
-                                                    'Berhasil Terhapus',
-                                                    'success'
-                                                )
-                                                data_petugas.ajax.reload(null, false)
-                                            }
-                                        });
-                                    } else if (result.dismiss === swal.DismissReason.cancel) {
-                                        swal(
-                                            'Batal',
-                                            'Anda membatalkan penghapusan',
-                                            'error'
-                                        )
-                                    };
-                                });
-                            });
-                        });
-                    </script>
                     </body>
 
 </html>

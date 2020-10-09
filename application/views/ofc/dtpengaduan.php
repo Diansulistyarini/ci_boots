@@ -52,11 +52,14 @@
             user-select: none;
         }
 
+        .header {
+            background-color: white;
+            margin-top: 15px;
+        }
 
         h3 {
             text-align: center;
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            margin-top: 10px;
         }
 
         @media (min-width: 768px) {
@@ -127,90 +130,45 @@
                                     Data Officer
                                 </a>
                             </li>
-                        
+
                         </ul>
                     </div>
                 </nav>
                 <!--  -->
 
                 <!-- tampil data user -->
-                <div class="container" style="margin-left:230px;margin-top:0px">
-                    <div class="header" style="background-color: white;">
-                        <h3>Data Officer</h3>
-
-                        <a href="<?php echo site_url('Dashboard/cetakOfc_pdf'); ?>"><img src="<?php echo base_url() . 'assets/img/pdf-icon.png' ?>" width="50px" style="margin-left: 910px;margin-top: -50px;"></a>
-                        <a href="<?php echo site_url('Dashboard/cetakUser_xls'); ?>"><img src="<?php echo base_url() . 'assets/img/excel.png' ?>" width="52px" style="margin-left: 980px;margin-top: -90px;"></a>
+                <div class="container" style="margin-left:230px">
+                    <div class="header">
+                        <h3>Data Pengaduan</h3>
+                        <!-- <a href="<?php echo site_url('Dashboard/cetak_pdf'); ?>"><img src="<?php echo base_url() . 'assets/img/pdf-icon.png' ?>" width="50px" style="margin-left: 910px;margin-top: -50px;"></a>
+                        <a href="<?php echo site_url('Dashboard/cetak_xls'); ?>"><img src="<?php echo base_url() . 'assets/img/excel.png' ?>" width="52px" style="margin-left: 980px;margin-top: -90px;"></a> -->
 
                     </div>
-                    <a href="#addModal" data-toggle="modal" class="btn btn-sm btn-success btn-sm addbtn" style="margin-bottom: 10px;"><i class="fas fa-plus fa-sm text-white"></i>Add Officer</a>
 
-                    <!-- tampil data petugas -->
+                    <!-- tampil data pengaduan -->
                     <div class="table-responsive">
-                        <table class="table table-bordered text-center" cellspacing="0" width="100%" id="dataPetugas">
+                        <table class="table table-bordered text-center" cellspacing="0" width="100%" id="dataReport">
                             <thead class="bg-secondary text-white">
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Petugas</th>
-                                    <th>Username</th>
-                                    <th>level</th>
+                                    <!-- <th>ID Pengaduan</th> -->
+                                    <th>Tanggal</th>
+                                    <th>Isi Pengaduan</th>
+                                    <th>Bukti Foto</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="data_petugas">
+                            <tbody id="data_report">
                             </tbody>
                         </table>
                     </div>
-                    </main>
                 </div>
             </div>
             <!-- end kontainer -->
 
-            <!-- Add Data Modal -->
-            <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Data</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form id="inputpetugas" method="post">
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Nama Petugas</label>
-                                    <input type="text" name="nmptgs" id="nmptgs" class="form-control" placeholder="Masukkan Nama petugas">
-                                </div>
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    <input type="text" name="usrnm" id="usrnm" class="form-control" placeholder="Masukan Username">
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" name="pwptgs" id="pwptgs" class="form-control" placeholder="Masukan Password">
-                                </div>
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <select class="custom-select drpdw" name="rlptgs" id="rlptgs">
-                                        <option selected>Choose..</option>
-                                        <option value="admin">Admin</option>
-                                        <option value="petugas">Petugas</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <input type="hidden" name="action" class="btn btn-success" value="Add" />
-                                <input type="submit" value="Add" name="action" class="btn btn-success" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- end add data modal -->
-
             <!-- edit data modal -->
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- <div class="modal fade" id="tanggapModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -219,24 +177,17 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="editpetugas" method="post">
+                        <form id="formtanggap" method="post">
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label>Nama Petugas</label>
-                                    <input type="text" name="nmptgs" id="namapetugas" class="form-control" placeholder="Masukkan Nama petugas">
+                                    <label>Tanggal Tanggapan</label>
+                                    <input type="hidden" name="tgl_tanggapan" id="tgl_tanggapan" class="form-control" placeholder="Masukkan Nama petugas">
                                 </div>
                                 <div class="form-group">
-                                    <label>Username</label>
-                                    <input type="text" name="usrnm" id="usernamepetugas" class="form-control" placeholder="masukan username petugas">
+                                    <label>Tanggapan</label>
+                                    <textarea type="text" name="tanggapan" id="tanggapan" class="form-control" placeholder="masukan username petugas"></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label>role</label>
-                                    <select class="custom-select drpdw" name="rlptgs" id="rolepetugas">
-                                        <option selected>Choose...</option>
-                                        <option value="admin">Admin</option>
-                                        <option value="petugas">Petugas</option>
-                                    </select>
-                                </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -247,8 +198,50 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- end edit data modal -->
+
+            <!-- Tanggap modal -->
+            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Tanggapan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="addrespon" method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>ID Pengaduan</label>
+                                    <input type="text" name="idAduan" id="idaduan" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal tanggapan</label>
+                                    <input type="date" name="tgltanggapan" id="tgltanggapan" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Response </label>
+                                    <input type="text" name="tanggapan" id="respon" class="form-control" placeholder="Masukan Response terhadap Pengduan Tersebut">   
+                                </div>
+                                <div class="form-group">
+                                    <label>ID Petugas </label>
+                                    <input type="text" value="<?php echo $this->session->userdata('id_petugas')?>" name="id_petugas" id="idPetugas"  class="form-control" >
+
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <input type="hidden" name="action" class="btn btn-success" value="add">
+                                <input type="submit" value="add" name="action" class="btn btn-success">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- end tanggap modal -->
+
 
             <!-- Modal Logout -->
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -264,12 +257,14 @@
                             Are you sure want to logout?
                         </div>
                         <div class="modal-footer">
-                            <a href="<?php echo site_url('Dashboard/ofc') ?>"><button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                <a href="<?php echo site_url('Dashboard/login') ?>"><button type="button" class="btn btn-primary">Yes</button>
+                            <a href="<?php echo site_url('Dashboard/data_ofc') ?>"><button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <a href="<?php echo base_url() ?>"><button type="button" class="btn btn-primary">Yes</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+
 
             <!-- Optional JavaScript -->
             <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -317,30 +312,36 @@
             <script>
                 $(document).ready(function() {
                     // ini adalah fungsi untuk memunculkan modal
-                    $('.addbtn').on('click', function() {
+                    // $('.addbtn').on('click', function() {
 
-                        $('#addModal').modal('show');
+                    //     $('#addModal').modal('show');
 
-                    });
+                    // });
                     // ini adalah fungsi untuk memunculkan data di datatable
-                    var data_petugas = $('#dataPetugas').DataTable({
+                    var data_petugas = $('#dataReport').DataTable({
                         "processing": true,
-                        "ajax": "<?= base_url("Dashboard/data_petugas") ?>",
+                        "ajax": "<?= base_url("Dashboard/set_pengaduan") ?>",
                         "data": [],
                     });
 
-                    // ADD DATA
-                    $(document).on('submit', '#inputpetugas', function(event) {
-                        event.preventDefault();
-                        var petugas_nama = $('#nmptgs').val();
-                        var petugas_username = $('#usrnm').val();
-                        var petugas_password = $('#pwptgs').val();
-                        var petugas_level = $('#rlptgs').val();
+                    // modal tanggapan
+                    $('.editbtn').on('click', function() {
+                        $('#tanggapModal').modal('show');
+                    });
 
-                        if (petugas_nama != '' && petugas_username != '' && petugas_password != '' && petugas_level != '') {
+                    // ADD Tanggapan
+                    $(document).on('submit', '#addrespon', function(event) {
+                        event.preventDefault();
+                        // var tanggap_id = "";
+                        var tanggap_idpengaduan = $('#idaduan').val();
+                        var tanggap_tgl = $('#tgltanggapan').val();
+                        var tanggapan = $('#respon').val();
+                        var id_petugas = $('#idPetugas').val();
+
+                        if (tanggap_idpengaduan != '' && tanggap_tgl != '' && tanggapan != '' && id_petugas != '') {
                             $.ajax({
                                 type: "POST",
-                                url: "<?= base_url("Dashboard/insert_petugas") ?>",
+                                url: "<?= base_url("Dashboard/insert_report") ?>",
                                 beforeSend: function() {
                                     swal({
                                         type: 'loading',
@@ -357,11 +358,11 @@
                                 success: function() {
                                     swal({
                                         type: 'success',
-                                        title: 'Tambah Data Officer',
-                                        text: 'Anda Berhasil Menambah Data Office'
+                                        title: 'Reply Tanggapan',
+                                        text: 'Anda Berhasil Menanggapi'
                                     })
-                                    $('#inputpetugas')[0].reset();
-                                    $('#addModal').modal('hide');
+                                    $('#addrespon')[0].reset();
+                                    $('#editModal').modal('hide');
                                     data_petugas.ajax.reload(null, false);
                                 },
                             });
@@ -374,27 +375,48 @@
                         }
                     });
 
-                    // EDIT DATA
-                    // Get id petugas
+                    // INSERT DATA
+                    // Get id pengaduan
                     $(document).on('click', '.editbutton', function(event) {
-                        console.log("masuk halaman edit")
+                        // console.log("Modal Tanggapan")
+                        event.preventDefault();
                         var div = $(event.relatedTarget)
-                        var id_petugas = $(this).attr("id");
+                        var id_pengaduan = $(this).attr("id");
                         $.ajax({
-                            url: "get_petugas",
+                            url: "getIdPengaduan",
                             type: "post",
                             data: {
-                                id_petugas: id_petugas
+                                id_pengaduan: id_pengaduan
+
                             },
                             dataType: "JSON",
                             success: function(data) {
                                 $('#editModal').modal('show');
-                                $('#namapetugas').val(data.nama_petugas);
-                                $('#usernamepetugas').val(data.username);
-                                // $('#passwordpetugas').val(data.password);
-                                // $('#telppetugas').val(data.telp);
-                                $('#rolepetugas').val(data.level);
-                                $('#idpetugas').val(id_petugas);
+                                $('#idaduan').val(data.id_pengaduan);
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                console.log(xhr.responseText);
+                            }
+                        });
+                    });
+
+                    // Get id petugas
+                    $(document).on('click', '.editbutton', function(event) {
+                        // console.log("Modal Tanggapan")
+                        event.preventDefault();
+                        var div = $(event.relatedTarget)
+                        var id_petugas = $(this).attr("id");
+                        $.ajax({
+                            url: "getid_petugas",
+                            type: "post",
+                            data: {
+                                id_petugas: id_petugas
+
+                            },
+                            dataType: "JSON",
+                            success: function(data) {
+                                $('#editModal').modal('show');
+                                $('#idPetugas').val(data.id_petugas);
                             },
                             error: function(xhr, ajaxOptions, thrownError) {
                                 console.log(xhr.responseText);
@@ -405,11 +427,11 @@
                     // Edit petugas
                     $(document).on('submit', '#editpetugas', function(event) {
                         event.preventDefault();
-                        var petugas_nama = $('#namapetugas').val();
-                        var petugas_username = $('#usernamepetugas').val();
-                        // var petugas_password = $('#passwordpetugas').val();
+                        var petugas_nama = $('#nama').val();
+                        var petugas_username = $('#isip').val();
+                        var petugas_file = $('#file').val();
                         // var petugas_telpon = $('#telppetugas').val();
-                        var petugas_level = $('#rolepetugas').val();
+                        // var petugas_level = $('#rolepetugas').val();
 
                         if (petugas_nama != '' && petugas_username != '' && petugas_level != '') {
                             $.ajax({
@@ -452,53 +474,53 @@
                     });
 
                     // delete petugas
-                    $(document).on('click', '.deletebtn', function() {
-                        var id_petugas = $(this).attr("id");
-                        swal({
-                            title: 'Konfirmasi',
-                            text: "Apakah anda yakin ingin menghapus ",
-                            type: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Hapus',
-                            confirmButtonColor: '#d33',
-                            cancelButtonColor: '#3085d6',
-                            cancelButtonText: 'Tidak',
-                            reverseButtons: true
-                        }).then((result) => {
-                            if (result.value) {
-                                $.ajax({
-                                    url: "<?= base_url('Dashboard/hapus_petugas') ?>",
-                                    type: "post",
-                                    beforeSend: function() {
-                                        swal({
-                                            title: 'Menunggu',
-                                            html: 'Memproses data',
-                                            onOpen: () => {
-                                                swal.showLoading()
-                                            }
-                                        })
-                                    },
-                                    data: {
-                                        id_petugas: id_petugas
-                                    },
-                                    success: function(data) {
-                                        swal(
-                                            'Hapus',
-                                            'Berhasil Terhapus',
-                                            'success'
-                                        )
-                                        data_petugas.ajax.reload(null, false)
-                                    }
-                                });
-                            } else if (result.dismiss === swal.DismissReason.cancel) {
-                                swal(
-                                    'Batal',
-                                    'Anda membatalkan penghapusan',
-                                    'error'
-                                )
-                            };
-                        });
-                    });
+                    // $(document).on('click', '.deletebtn', function() {
+                    //     var id_petugas = $(this).attr("id");
+                    //     swal({
+                    //         title: 'Konfirmasi',
+                    //         text: "Apakah anda yakin ingin menghapus ",
+                    //         type: 'warning',
+                    //         showCancelButton: true,
+                    //         confirmButtonText: 'Hapus',
+                    //         confirmButtonColor: '#d33',
+                    //         cancelButtonColor: '#3085d6',
+                    //         cancelButtonText: 'Tidak',
+                    //         reverseButtons: true
+                    //     }).then((result) => {
+                    //         if (result.value) {
+                    //             $.ajax({
+                    //                 url: "<?= base_url('Dashboard/hapus_petugas') ?>",
+                    //                 type: "post",
+                    //                 beforeSend: function() {
+                    //                     swal({
+                    //                         title: 'Menunggu',
+                    //                         html: 'Memproses data',
+                    //                         onOpen: () => {
+                    //                             swal.showLoading()
+                    //                         }
+                    //                     })
+                    //                 },
+                    //                 data: {
+                    //                     id_petugas: id_petugas
+                    //                 },
+                    //                 success: function(data) {
+                    //                     swal(
+                    //                         'Hapus',
+                    //                         'Berhasil Terhapus',
+                    //                         'success'
+                    //                     )
+                    //                     data_petugas.ajax.reload(null, false)
+                    //                 }
+                    //             });
+                    //         } else if (result.dismiss === swal.DismissReason.cancel) {
+                    //             swal(
+                    //                 'Batal',
+                    //                 'Anda membatalkan penghapusan',
+                    //                 'error'
+                    //             )
+                    //         };
+                    //     });
+                    // });
                 });
             </script>
 

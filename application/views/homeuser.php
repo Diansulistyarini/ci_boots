@@ -12,8 +12,8 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/css/bootsrap.min.css') ?>">
     <style>
         body {
-            /* background-color: #6A94FF; */
-            background-image: url('http://localhost/ci_boots/assets/img/z_orig.png');
+            background-color: #6A94FF;
+            /* background-image: url('http://localhost/ci_boots/assets/img/z_orig.png'); */
 
         }
 
@@ -22,7 +22,7 @@
             height: 625px;
             margin: auto;
             padding: 15px;
-            /* background-color: #f2f2f2; */
+            background-color: #f2f2f2;
         }
 
         .card-header {
@@ -63,7 +63,7 @@
 
         .col {
             background-color: #dedede;
-            margin-top: -121px;
+            margin-top: -160px;
             margin-left: 150px;
             width: 700px;
             height: 530px;
@@ -106,7 +106,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo site_url('Dashboard/report_form')?>" style="color: white;">
                             <span data-feather="list"></span>
-                            Pengaduan
+                            Form
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo site_url('Dashboard/pu')?>" style="color: white;">
+                            <span data-feather="list"></span>
+                            Pengaduanku
                             </a>
                         </li>
                     </ul>
